@@ -67,6 +67,6 @@ class WkhtmltopdfDriver extends Driver
 
         $pdf = $wk->toString();
 
-        return $pdf;
+        return (string) $pdf;
     }
 }
