@@ -23,6 +23,10 @@ build:
     memcached: false
     neo4j: false
     rabbitmq: false
+    apt_packages:
+      - xvfb
+      - libfontconfig
+      - wkhtmltopdf
   nodes:
     analysis:
       tests:
