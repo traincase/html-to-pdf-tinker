@@ -23,7 +23,7 @@ class DompdfDriver extends Driver
      * @param FilesystemInterface $filesystem Filesystem used for storing the PDF
      * @param PdfToGenerateDTO $dto Data needed to generate the PDF file
      * @return string Filepath to the generated PDF file
-     * @throws \Exception
+     * @throws PdfCouldNotBeCreatedException
      */
     public function storeOnFilesystem(FilesystemInterface $filesystem, PdfToGenerateDTO $dto): string
     {
