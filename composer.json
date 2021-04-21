@@ -26,10 +26,10 @@
         }
     },
     "require": {
-        "php": "^7.4",
-        "dompdf/dompdf": "^0.8.5",
+        "php": "^7.4 || ^8.0",
+        "dompdf/dompdf": "^0.8.5 || ^1.0.2",
         "mikehaertl/phpwkhtmltopdf": "^2.4",
-        "spatie/data-transfer-object": "^1.13"
+        "spatie/data-transfer-object": "^2.8.3 || ^3.0.4"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.0",
