@@ -3,7 +3,7 @@
 namespace Traincase\HtmlToPdfTinker\Drivers;
 
 use Exception;
-use League\Flysystem\FilesystemInterface;
+use League\Flysystem\Filesystem;
 use mikehaertl\wkhtmlto\Pdf;
 use Traincase\HtmlToPdfTinker\DTO\PdfToGenerateDTO;
 use Traincase\HtmlToPdfTinker\Exceptions\PdfCouldNotBeCreatedException;
@@ -20,12 +20,12 @@ class WkhtmltopdfDriver extends Driver
     /**
      * Create the PDF and return it in string format.
      *
-     * @param FilesystemInterface $filesystem Filesystem used for storing the PDF
+     * @param Filesystem $filesystem Filesystem used for storing the PDF
      * @param PdfToGenerateDTO $dto Data needed to generate the PDF file
      * @return string Filepath to the generated PDF file
      * @throws PdfCouldNotBeCreatedException
      */
-    public function storeOnFilesystem(FilesystemInterface $filesystem, PdfToGenerateDTO $dto): string
+    public function storeOnFilesystem(Filesystem $filesystem, PdfToGenerateDTO $dto): string
     {
         try {
             $options = array_merge([
@@ -40,7 +40,7 @@ class WkhtmltopdfDriver extends Driver
 
             $fullPath = $this->getFullPath($dto->path, $dto->filename);
 
-            $filesystem->put($fullPath, $pdf);
+            $filesystem->write($fullPath, $pdf);
 
             return $fullPath;
         } catch (\Exception $e) {

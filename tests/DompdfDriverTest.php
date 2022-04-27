@@ -4,12 +4,11 @@ namespace Traincase\HtmlToPdfTinker\Tests;
 
 use Dompdf\Dompdf;
 use League\Flysystem\Filesystem;
-use League\Flysystem\Memory\MemoryAdapter;
+use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
 use PHPUnit\Framework\TestCase;
 use Traincase\HtmlToPdfTinker\Drivers\DompdfDriver;
 use Traincase\HtmlToPdfTinker\DTO\PdfToGenerateDTO;
 use Traincase\HtmlToPdfTinker\Exceptions\PdfCouldNotBeCreatedException;
-use Traincase\HtmlToPdfTinker\Tests\Util\PDF2Text;
 
 class DompdfDriverTest extends TestCase
 {
@@ -17,13 +16,13 @@ class DompdfDriverTest extends TestCase
     public function it_creates_pdfs_on_the_filesystem()
     {
         $driver = new DompdfDriver(new Dompdf);
-        $dto = new PdfToGenerateDTO([
+        $dto = PdfToGenerateDTO::fromArray([
             'filename' => 'test.pdf',
             'html' => '<html lang="en"><body><p>test text</p></body>',
             'options' => [],
             'path' => '/tmp',
         ]);
-        $filesystem = new Filesystem(new MemoryAdapter);
+        $filesystem = new Filesystem(new InMemoryFilesystemAdapter);
 
         // Create PDF
         $path = $driver->storeOnFilesystem($filesystem, $dto);
@@ -34,7 +33,7 @@ class DompdfDriverTest extends TestCase
             ->getText();
 
         $this->assertTrue($filesystem->has($path));
-        $this->assertSame('application/pdf', $filesystem->getMimetype($path));
+        $this->assertSame('application/pdf', $filesystem->mimeType($path));
         $this->assertSame('test text', $textContent);
     }
 
@@ -45,13 +44,13 @@ class DompdfDriverTest extends TestCase
         $this->expectExceptionMessage('Dompdf could not create PDF');
 
         $driver = new DompdfDriver(new Dompdf);
-        $dto = new PdfToGenerateDTO([
+        $dto = PdfToGenerateDTO::fromArray([
             'filename' => 'test.pdf',
             'html' => '<html lang="en"><body><p>test text</p></body>',
             'options' => [],
             'path' => '../../../../outside-of-filesystem',
         ]);
-        $filesystem = new Filesystem(new MemoryAdapter);
+        $filesystem = new Filesystem(new InMemoryFilesystemAdapter);
 
         // Try to create PDF outside of valid filesystem
         $path = $driver->storeOnFilesystem($filesystem, $dto);
@@ -72,12 +71,12 @@ class DompdfDriverTest extends TestCase
         };
 
         $driver = new DompdfDriver(new $corruptedDompdf);
-        $dto = new PdfToGenerateDTO([
+        $dto = PdfToGenerateDTO::fromArray([
             'filename' => 'test.pdf',
             'html' => '<html lang="en"><body><p>test text</p></body>',
             'options' => [],
         ]);
-        $filesystem = new Filesystem(new MemoryAdapter);
+        $filesystem = new Filesystem(new InMemoryFilesystemAdapter);
 
         // Try to create PDF outside of valid filesystem
         $path = $driver->storeOnFilesystem($filesystem, $dto);

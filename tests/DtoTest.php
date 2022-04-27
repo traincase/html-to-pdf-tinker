@@ -12,7 +12,7 @@ class DtoTest extends TestCase
     /** @test */
     public function it_defaults_the_orientation_to_portrait()
     {
-        $dto = new PdfToGenerateDTO([
+        $dto = PdfToGenerateDTO::fromArray([
             'filename' => 'test.pdf',
             'html' => '<html lang="en"><body><p>test text</p></body>',
             'options' => [],
@@ -26,7 +26,7 @@ class DtoTest extends TestCase
     /** @test */
     public function it_defaults_the_path_to_root()
     {
-        $dto = new PdfToGenerateDTO([
+        $dto = PdfToGenerateDTO::fromArray([
             'filename' => 'test.pdf',
             'html' => '<html lang="en"><body><p>test text</p></body>',
             'orientation' => 'landscape',
@@ -46,7 +46,7 @@ class DtoTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Mode should either be "portrait" or "landscape", got "invalid-mode"');
 
-        new PdfToGenerateDTO([
+        PdfToGenerateDTO::fromArray([
             'filename' => 'test.pdf',
             'html' => '<html lang="en"><body><p>test text</p></body>',
             'orientation' => 'invalid-mode',

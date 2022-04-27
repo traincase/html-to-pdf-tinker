@@ -2,49 +2,45 @@
 
 namespace Traincase\HtmlToPdfTinker\DTO;
 
-use Spatie\DataTransferObject\DataTransferObject;
-
-class PdfToGenerateDTO extends DataTransferObject
+class PdfToGenerateDTO
 {
-    /**
-     * The filename if you plan to store this PDF on the filesystem.
-     */
-    public string $filename;
+    public function __construct(
+        // The filename if you plan to store this PDF on the filesystem.
+        public string $filename,
 
-    /**
-     * The HTML string to convert to PDF
-     */
-    public string $html;
+        // The HTML string to convert to PDF
+        public string $html,
 
-    /**
-     * Display orientation of the PDF: 'portrait' or 'landscape'
-     */
-    public string $orientation;
+        // Display orientation of the PDF: 'portrait' or 'landscape'
+        public string $orientation,
 
-    /**
-     * Any driver specific options you wish to pass.
-     */
-    public array $options;
+        // Any driver specific options you wish to pass.
+        public array $options,
 
-    /**
-     * The path to where you plan to store this PDF on the filesystem.
-     */
-    public string $path;
+        // The path to where you plan to store this PDF on the filesystem.
+        public string $path,
+    ) {
+    }
 
-    public function __construct(array $attributes)
+    public static function fromArray(array $attributes): self
     {
-        if (($attributes['orientation'] ?? null)
+        if (array_key_exists('orientation', $attributes)
             && !in_array($attributes['orientation'], ['portrait', 'landscape'])
         ) {
-            throw new \InvalidArgumentException(sprintf(
-                'Mode should either be "portrait" or "landscape", got "%s"',
-                $attributes['orientation']
-            ));
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'Mode should either be "portrait" or "landscape", got "%s"',
+                    $attributes['orientation']
+                )
+            );
         }
 
-        parent::__construct(array_merge([
-            'orientation' => 'portrait',
-            'path' => '/',
-        ], $attributes));
+        return new self(
+            filename: $attributes['filename'],
+            html: $attributes['html'],
+            orientation: $attributes['orientation'] ?? 'portrait',
+            options: $attributes['options'] ?? [],
+            path: $attributes['path'] ?? '/',
+        );
     }
 }
