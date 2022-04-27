@@ -39,7 +39,7 @@ build:
   tests:
     before:
       -
-        command: composer test-coverage
+        command: XDEBUG_MODE=coverage composer test-coverage
         coverage:
           file: 'build/logs/clover.xml'
           format: 'clover'
